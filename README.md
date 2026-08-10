@@ -140,32 +140,6 @@ PORT=4000 pnpm dev:api
 
 Turborepo treats `.env*` files as build inputs. Keep local secrets in ignored `.env` files; never commit them.
 
-## Ponytail for Claude Code
-
-[Ponytail](https://github.com/DietrichGebert/ponytail) is a Claude Code plugin that favors the smallest correct implementation and avoids speculative abstractions. It is developer tooling, not an application dependency, so install it in Claude Code rather than with pnpm.
-
-In a Claude Code session, send these as **two separate prompts**:
-
-```text
-/plugin marketplace add DietrichGebert/ponytail
-```
-
-```text
-/plugin install ponytail@ponytail
-```
-
-The same steps work in the Claude Code Desktop app's **Code** tab. Node.js must be available on the non-interactive shell `PATH` for Ponytail's lifecycle hooks; the skills still work without it, but automatic activation does not.
-
-Ponytail defaults to `full` mode. Switch levels in Claude Code with:
-
-```text
-/ponytail lite
-/ponytail full
-/ponytail ultra
-```
-
-Use `stop ponytail`, `normal mode`, or `/ponytail off` to disable it for the current session. To update manually, run `/plugin marketplace update ponytail` and then `/reload-plugins`.
-
 ## Useful pnpm commands
 
 ```bash
