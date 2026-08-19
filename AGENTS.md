@@ -93,6 +93,32 @@ Follow this order and do not skip steps:
 Style with Tailwind utilities. Adapt shadcn/ui components to the prototype's visual identity rather
 than forking them into unrelated one-off components.
 
+### Text and icons
+
+All UI text goes through the `Text` component and all icons through the `Icon` component. There are
+no bare `<p>`, `<span>`, or `<h1>`-`<h6>` tags in application code, and no Tailwind classes for text
+size or color at the call site.
+
+```tsx
+<Text variant="title">Mi garage</Text>
+<Text variant="caption" color="muted">Ultimo servicio hace 3 meses</Text>
+<Icon name="Car" size="md" color="muted" />
+```
+
+- `Text` takes a `variant` (the role of the text: `title`, `heading`, `body`, `label`, `caption`,
+  `overline`, `numeric`, …) and a `color` token. Font family, size, weight, and tracking come from
+  the variant; never pass `text-sm`, `text-xl`, or a hex color to override them. Use `as` when the
+  semantic tag has to differ from the variant's default, and `className` only for spacing and width.
+- `Icon` takes a lucide-react icon `name`, a `size` from the scale (`xs` 14px, `sm` 16px, `md` 20px,
+  `lg` 24px, `xl` 28px), and the same `color` tokens as `Text`.
+- Colors are always requested by token name (`primary`, `muted`, `danger`, …), never as a hex value.
+  Tokens are defined once with `@theme` in `apps/web/src/styles.css`.
+
+Oxlint enforces this with `react/forbid-elements`. The only file exempted is the `Text` component
+itself, which is the one place allowed to render those tags; the exemption lives in `.oxlintrc.json`
+under `overrides`. Do not disable the rule elsewhere — if a case seems to need it, the fix is a new
+`Text` variant.
+
 ## Tooling
 
 - Use pnpm; do not use npm or yarn.
