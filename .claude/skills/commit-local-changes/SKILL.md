@@ -33,6 +33,7 @@ Review the changes currently present on the **active Git branch**, understand wh
 4. **Synchronize project documentation**
    - Before creating the commit, invoke the separately installed skill named `sync-project-docs` using the current host/agent's native skill invocation mechanism.
    - The invocation is mandatory. Wait for it to finish before continuing.
+   - Hosts differ: some run `sync-project-docs` as an isolated subagent, others load its instructions into the current turn. Either way its result line is an internal handoff back to this workflow, never a final answer to the user. When it runs inline, do not end the turn on that result — carry on with the handling below and then step 5 within the same turn.
    - `sync-project-docs` reviews only the staged commit candidate and owns the decision about whether documentation needs updating.
    - Handle its result exactly as follows:
      - `DOCS_NOT_NEEDED` → continue without documentation changes.
@@ -42,6 +43,7 @@ Review the changes currently present on the **active Git branch**, understand wh
    - Do not ask `sync-project-docs` to commit, push, reset, stash, or alter unrelated files; the commit skill remains responsible for Git staging and commit creation.
 
 5. **Create the commit**
+   - Reaching step 4 is not completion. Unless `DOCS_BLOCKED` stopped the workflow, this step must run before the turn ends.
    - Use a **Conventional Commits-style** subject:
      `type(scope): short description`
    - Choose the type based on the actual work, for example:
@@ -94,6 +96,7 @@ Notes:
 - Do not push to a remote.
 - Do not run destructive Git commands such as `git reset --hard` or `git clean`.
 - If there are no changes to commit, report that clearly and do not create an empty commit.
+- Never finish a turn with changes staged but uncommitted. Staging without committing leaves the work half-done.
 - If changes appear to contain multiple unrelated pieces of work, create the commit only for the coherent current work and leave unrelated changes untouched.
 - Documentation changes produced by `sync-project-docs` belong to the same commit that triggered them.
 - After committing, run `git status --short` and report the created commit hash and commit message.

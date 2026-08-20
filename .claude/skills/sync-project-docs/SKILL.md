@@ -22,6 +22,7 @@ Optimize for minimal token usage.
 9. If documentation needs changes, modify only the relevant files under the repository-root `docs/` tree, then return:
    `DOCS_UPDATED: <comma-separated repo-relative paths>`
 10. Do not stage or commit anything. The calling skill owns staging and committing.
+11. The result line is addressed to the calling skill, not to the user, and it never ends the caller's work. When this skill is loaded into an existing turn instead of a separate subagent, report the result and let the caller continue its workflow in the same turn.
 
 ## Documentation location
 
